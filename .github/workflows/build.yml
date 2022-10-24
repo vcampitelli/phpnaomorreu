@@ -26,5 +26,6 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 0600 ~/.ssh/id_rsa
           echo "${{ secrets.SSH_KNOWN_HOST }}" > ~/.ssh/known_hosts
-          rsync -aiz --delete dist/ ${{ secrets.SSH_HOST }}:~/
+          rsync -aiz --delete -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa" dist/ ${{ secrets.SSH_HOST }}

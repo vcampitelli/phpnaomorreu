@@ -7,7 +7,7 @@ require __DIR__ . '/src/LatestPhpVersion.php';
 require __DIR__ . '/src/PhpUsagePercentage.php';
 require __DIR__ . '/src/WordpressUsagePercentage.php';
 
-$stars = (new Crawler\GitHubApi($_ENV['GITHUB_TOKEN']))
+$stars = (new Crawler\GitHubApi(getenv('GITHUB_TOKEN')))
     ->addRepository('laravel', 'laravel/laravel')
     ->addRepository('slim', 'slimphp/Slim')
     ->addRepository('symfony', 'symfony/symfony')

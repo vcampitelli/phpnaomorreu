@@ -1,5 +1,7 @@
 # O PHP não morreu
 
+[![Build](https://github.com/vcampitelli/phpnaomorreu/actions/workflows/build.yml/badge.svg)](https://github.com/vcampitelli/phpnaomorreu/actions/workflows/build.yml)
+
 Mesmo sendo a linguagem mais usada na Web, muitas pessoas ainda se perguntam diariamente: "o PHP morreu?". Felizmente, não!
 Veja aqui estatísticas, referências e alguns projetos dessa linguagem.
 
