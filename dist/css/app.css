@@ -128,9 +128,6 @@ h3 {
   white-space: nowrap;
   font-size: 0.9rem;
 }
-#tools > ul > li > span.installs:after {
-  content: " \2b07";
-}
 #tools > ul > li > span.stars:after {
   content: " \2605";
 }
@@ -152,10 +149,9 @@ h3 {
 }
 
 #footer {
-  margin-top: 3rem;
-  margin-bottom: 1rem;
-  text-align: center;
+  margin-top: 1rem;
   padding-top: 1rem;
+  padding-bottom: 1rem;
   border-top: 1px var(--color-border) solid;
   font-size: 0.8em;
 }
@@ -205,6 +201,7 @@ h3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-align: center;
   }
   #footer > div {
     margin-top: 0;
