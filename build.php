@@ -14,6 +14,7 @@ $stars = (new Crawler\GitHubApi(getenv('GITHUB_TOKEN')))
     ->addRepository('composer', 'composer/composer')
     ->addRepository('awesomePhp', 'ziadoz/awesome-php')
     ->addOrganization('phpLeague', 'thephpleague')
+    ->addOrganization('laminas', 'laminas')
     ->run();
 
 [$latestPhpVersion, $latestPhpVersionReleaseDate] = (new Crawler\LatestPhpVersion(
