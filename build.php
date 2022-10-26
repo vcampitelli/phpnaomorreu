@@ -31,4 +31,4 @@ ob_start();
 require __DIR__ . '/template/index.phtml';
 $template = ob_get_clean();
 
-file_put_contents(__DIR__ . '/dist/index.html', $template, LOCK_EX);
+file_put_contents(__DIR__ . '/public/index.html', $template, LOCK_EX);
