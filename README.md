@@ -22,4 +22,4 @@ buscam sobre nos mecanismos de pesquisas.
 ## Como contribuir
 
 Para contribuir com o projeto, [crie um fork](https://github.com/vcampitelli/phpnaomorreu/fork) deste repositório, faça
-suas alterações e abra uma _pull request_.
+suas alterações no arquivo [template/index.phtml](template/index.phtml) e abra uma _pull request_.
