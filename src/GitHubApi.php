@@ -125,6 +125,6 @@ class GitHubApi
         for ($i = 0; $num >= 1000; $i++) {
             $num /= 1000;
         }
-        return round($num, 1) . $units[$i];
+        return number_format($num, 1, ',', '.') . $units[$i];
     }
 }
