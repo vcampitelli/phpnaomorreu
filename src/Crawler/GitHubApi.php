@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Crawler;
+namespace App\Crawler;
 
 use CurlHandle;
 use RuntimeException;
@@ -37,29 +37,30 @@ class GitHubApi
         return $this;
     }
 
-    public function run(): stdClass
+    public function __invoke(): stdClass
     {
-        $curlMultiHandler = curl_multi_init();
+        $curlMultiHandler = \curl_multi_init();
 
         foreach ($this->handlers as $handler) {
-            curl_multi_add_handle($curlMultiHandler, $handler);
+            \curl_multi_add_handle($curlMultiHandler, $handler);
         }
 
+        $active = true;
         do {
-            $status = curl_multi_exec($curlMultiHandler, $active);
+            $status = \curl_multi_exec($curlMultiHandler, $active);
             if ($active) {
-                curl_multi_select($curlMultiHandler);
+                \curl_multi_select($curlMultiHandler);
             }
         } while ($active && $status == CURLM_OK);
 
         foreach ($this->handlers as $handler) {
-            curl_multi_remove_handle($curlMultiHandler, $handler);
+            \curl_multi_remove_handle($curlMultiHandler, $handler);
         }
-        curl_multi_close($curlMultiHandler);
+        \curl_multi_close($curlMultiHandler);
 
         $response = new stdClass();
         foreach ($this->handlers as $entry => $handler) {
-            $json = curl_multi_getcontent($handler);
+            $json = \curl_multi_getcontent($handler);
 
             $response->$entry = $this->parseJson($entry, $json);
         }
@@ -70,11 +71,11 @@ class GitHubApi
     private function parseJson(string $entry, string $json): string
     {
         if (empty($json)) {
-            throw new RuntimeException("Erro ao buscar dados de {$entry}");
+            throw new RuntimeException("Erro ao buscar dados de {$entry}: resposta vazia");
         }
-        $json = json_decode($json);
+        $json = \json_decode($json);
         if (empty($json)) {
-            throw new RuntimeException("Erro ao buscar dados de {$entry}");
+            throw new RuntimeException("Erro ao buscar dados de {$entry}: JSON inválido");
         }
 
         if (empty($this->isOrganization[$entry])) {
@@ -102,10 +103,10 @@ class GitHubApi
 
     private function makeRequest(string $url): CurlHandle
     {
-        $curlHandle = curl_init();
-        curl_setopt_array($curlHandle, [
+        $curlHandle = \curl_init();
+        \curl_setopt_array($curlHandle, [
             CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_RETURNTRANSFER => true,
             CURLOPT_USERAGENT => 'vcampitelli',
             CURLOPT_HTTPHEADER => [
                 "Authorization: Bearer {$this->token}",
@@ -125,6 +126,6 @@ class GitHubApi
         for ($i = 0; $num >= 1000; $i++) {
             $num /= 1000;
         }
-        return number_format($num, 1, ',', '.') . $units[$i];
+        return \number_format($num, 1, ',', '.') . $units[$i];
     }
 }

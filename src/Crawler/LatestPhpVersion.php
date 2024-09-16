@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Crawler;
+namespace App\Crawler;
 
+use App\CurlExec;
 use DateTimeImmutable;
 
 class LatestPhpVersion
@@ -14,8 +15,8 @@ class LatestPhpVersion
 
     public function __invoke(): ?array
     {
-        $json = file_get_contents($this->url);
-        $json = json_decode($json, true);
+        $json = (new CurlExec())->fetchAsString($this->url);
+        $json = \json_decode($json, true);
         $latestMajor = end($json);
         $latestMinor = end($latestMajor);
         $date = DateTimeImmutable::createFromFormat('d M Y', $latestMinor['date']);
