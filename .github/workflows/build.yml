@@ -22,15 +22,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+
       - name: Build
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: php build.php
+        run: composer run build
+
       - name: Configurando o GitHub Pages
-        uses: actions/configure-pages@v2
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b
+
       - name: Upload dos artefatos
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
         with:
           path: 'public'
 
@@ -43,5 +46,4 @@ jobs:
     steps:
       - name: Deploy para o GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
-
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e
