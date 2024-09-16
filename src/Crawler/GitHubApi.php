@@ -79,7 +79,7 @@ class GitHubApi
         }
 
         if (empty($this->isOrganization[$entry])) {
-            return ($json->stargazers_count) ? $this->shortNumber($json->stargazers_count) : '';
+            return (isset($json->stargazers_count)) ? $this->shortNumber($json->stargazers_count) : '';
         }
 
         $stars = 0;
