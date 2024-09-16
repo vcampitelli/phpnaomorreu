@@ -1,0 +1,33 @@
+{
+    "name": "vcampitelli/phpnaomorreu",
+    "description": "Repositório do site phpnaomorreu.com.br",
+    "homepage": "https://phpnaomorreu.com.br",
+    "type": "project",
+    "license": "GPL-3.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Vinícius Campitelli",
+            "email": "1877191+vcampitelli@users.noreply.github.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.3"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "4.0.x-dev",
+        "phpmd/phpmd": "dev-master",
+        "phpstan/phpstan": "2.0.x-dev"
+    },
+    "scripts": {
+        "build": "php build.php",
+        "phpcs": "phpcs",
+        "phpmd": "phpmd build.php,src/ ansi phpmd.xml",
+        "phpstan": "phpstan analyse"
+    }
+}

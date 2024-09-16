@@ -1,0 +1,31 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231
+
+      - name: Composer install
+        uses: ramsey/composer-install@57532f8be5bda426838819c5ee9afb8af389d51a
+
+      - name: PHPCS
+        run: |
+          composer run phpcs
+
+      - name: PHPMD
+        run: |
+          composer run phpmd
+
+      - name: PHPStan
+        run: |
+          composer run phpstan
