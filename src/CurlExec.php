@@ -10,34 +10,42 @@ use RuntimeException;
 
 class CurlExec
 {
-    /*
-        # Algoritmo
+    //variável de cache
+    private string $cachePath;
 
-        variavel arrayCache = [];
+    public function __construct()
+    {
+        //Obtem o caminho do cache a partir da variável de ambiente
+        $this->cachePath = getenv('CACHE_PATH') ? getenv('CACHE_PATH') : null;
 
-        se (arrayCache.TemValor) {
-            retorna Valor do arrayCache;
+        //se a variavel esta definida e o caminho não existe ele cria
+        if ($this->cachePath && !is_dir($this->cachePath)) {
+            mkdir($this->cachePath, 0777, true);
         }
-        
-        variável resposta = realizarRequisição(url);
+    }
 
-        arrayCache = resposta;
+    private function getCacheFilePath(string $url): string
+    {
+        //Gera o nome do arq
+        //Usando sha1
+        $fileName = sha1($url) . '.html';
 
-        retorna $resposta;
-    */ 
-
-    //Mantem o cache em memoria com static
-    private static array $cache = [];
+        //Retorna o caminho do arquivo
+        return $this->cachePath . DIRECTORY_SEPARATOR . $fileName;   
+    }
 
     public function fetchAsString(string $url): string
     {
-        //Verifica se ja temos a resposta no cache
-        if(isset(self::$cache[$url])) {
-            echo "Retornando resposta do cache para URL: {$url}\n";
-            return self::$cache[$url];
+        $cacheFile = $this->getCacheFilePath($url);
+
+        //Se o cache esta habilitado e o arq de cache existe, retorna o cache
+        if ($this->cachePath && file_exists($cacheFile)) {
+            echo " - Retornando resposta do cache para URL: {$url}\n";
+            return file_get_contents($cacheFile);
         }
 
-        echo "Realizando requisição para URL: {$url}\n";
+        //Caso não tenha cache
+        echo " - Realizando requisição para URL: {$url}\n";
 
         $curlHandle = \curl_init();
         \curl_setopt_array($curlHandle, [
@@ -51,7 +59,10 @@ class CurlExec
             throw new RuntimeException(\curl_error($curlHandle));
         }
 
-        self::$cache[$url] = $response;
+        if ($this->cachePath) {
+            file_put_contents($cacheFile, $response);
+        }
+
         return $response;
     }
 
