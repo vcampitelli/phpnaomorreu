@@ -10,15 +10,16 @@ use RuntimeException;
 
 class CurlExec
 {
-    //variável de cache
     private string $cachePath;
+    private int $maxRetries = 3;
+    private int $retryDelay = 5;
+
+
 
     public function __construct()
     {
-        //Obtem o caminho do cache a partir da variável de ambiente
         $this->cachePath = getenv('CACHE_PATH') ? getenv('CACHE_PATH') : null;
 
-        //se a variavel esta definida e o caminho não existe ele cria
         if ($this->cachePath && !is_dir($this->cachePath)) {
             mkdir($this->cachePath, 0777, true);
         }
@@ -26,11 +27,7 @@ class CurlExec
 
     private function getCacheFilePath(string $url): string
     {
-        //Gera o nome do arq
-        //Usando sha1
         $fileName = sha1($url) . '.html';
-
-        //Retorna o caminho do arquivo
         return $this->cachePath . DIRECTORY_SEPARATOR . $fileName;   
     }
 
@@ -38,32 +35,50 @@ class CurlExec
     {
         $cacheFile = $this->getCacheFilePath($url);
 
-        //Se o cache esta habilitado e o arq de cache existe, retorna o cache
         if ($this->cachePath && file_exists($cacheFile)) {
             echo " - Retornando resposta do cache para URL: {$url}\n";
             return file_get_contents($cacheFile);
         }
 
-        //Caso não tenha cache
-        echo " - Realizando requisição para URL: {$url}\n";
+        $attempt = 0;
 
-        $curlHandle = \curl_init();
-        \curl_setopt_array($curlHandle, [
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_USERAGENT => 'vcampitelli',
-        ]);
+        while ($attempt < $this->maxRetries) {
+            try {
+                echo " - Realizando requisição para URL: {$url} (tentativa ". ($attempt + 1) . ")\n";
 
-        $response = \curl_exec($curlHandle);
-        if ($response === false) {
-            throw new RuntimeException(\curl_error($curlHandle));
+                $curlHandle = \curl_init();
+                \curl_setopt_array($curlHandle, [
+                    CURLOPT_URL => $url,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_USERAGENT => 'vcampitelli',
+                ]);
+
+                $response = \curl_exec($curlHandle);
+
+                if ($response === false) {
+                    $errorCode = \curl_errno($curlHandle);
+                    if ($errorCode === CURLE_OPERATION_TIMEDOUT) {
+                        $attempt++;
+                        echo "Timeout❗. Tentando novamente em {$this->retryDelay} segundos...\n";
+                        sleep($this->retryDelay);
+                        continue;
+                    }
+                    throw new RuntimeException(\curl_error($curlHandle));
+                }
+
+                
+                if ($this->cachePath) {
+                    file_put_contents($cacheFile, $response);
+                }
+
+                return $response;
+            } catch (RuntimeException $e) {
+                throw $e;
+            }
         }
 
-        if ($this->cachePath) {
-            file_put_contents($cacheFile, $response);
-        }
+        throw new RuntimeException("Falha ao realizar a requisição para URL: {$url}");
 
-        return $response;
     }
 
     public function fetchAsXpath(string $url): DOMXPath
