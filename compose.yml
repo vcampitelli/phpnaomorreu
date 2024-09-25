@@ -1,0 +1,16 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: dev/Dockerfile
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - vendor:/app/vendor
+    env_file: .env
+    ports:
+      - "8000:8000"
+
+volumes:
+  vendor:
+    driver: local

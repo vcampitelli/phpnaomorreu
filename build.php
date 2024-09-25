@@ -8,10 +8,10 @@ $run = function (string $description, callable $execute): mixed {
     try {
         echo "\e[0m[ \e[36m..\e[0m ] \e[36m{$description}\e[0m";
         $response = $execute();
-        echo "\r\e[0m[ \e[1;32mOK\e[0m ] \e[36m{$description}\e[0m\n";
+        echo "\33[2K\r\e[0m[ \e[1;32mOK\e[0m ] \e[36m{$description}\e[0m\n";
         return $response;
     } catch (\Throwable $t) {
-        echo "\r\e[0m[ \e[1;31mERR\e[0m ] \e[36m{$description}\e[0m\n";
+        echo "\33[2K\r\e[0m[ \e[1;31mERR\e[0m ] \e[36m{$description}\e[0m\n";
         echo "    \e[31m{$t->getMessage()}\e[0m\n";
         die(1);
     }
@@ -54,4 +54,7 @@ ob_start();
 require __DIR__ . '/template/index.phtml';
 $template = ob_get_clean();
 
-file_put_contents(__DIR__ . '/public/index.html', $template, LOCK_EX);
+$run(
+    'Gerando public/index.html',
+    fn() => file_put_contents(__DIR__ . '/public/index.html', $template, LOCK_EX)
+);

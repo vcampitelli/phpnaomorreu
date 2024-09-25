@@ -2,3 +2,4 @@
 .env
 
 /vendor/
+public/index.html
