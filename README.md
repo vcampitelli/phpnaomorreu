@@ -21,15 +21,17 @@ buscam sobre nos mecanismos de pesquisas.
 
 ## Como executar
 
-- Instalar as dependências e configure o _autoload_ do PHP:
+1. Clone este repositório
     ```shell
-    composer install
+    git clone git@github.com:vcampitelli/phpnaomorreu.git
     ```
-- Então, a cada mudança que fizer (ou na 1a vez que for rodar o projeto), execute:
+2. Certifique-se que você tenha o [Docker](https://docs.docker.com/get-docker) e [Docker Compose](https://docs.docker.com/compose/install) instalados
+3. Execute:
     ```shell
-    composer run build
+    docker compose up
     ```
-- Esse comando vai gerar um arquivo `public/index.html`, que você deve acessar direto pelo navegador
+4. Abra o arquivo `public/index.html` em seu navegador
+5. Cada alteração no projeto irá disparar um _build_ automático (então basta acompanhar os logs do passo 3)
 
 ## Como contribuir
 
