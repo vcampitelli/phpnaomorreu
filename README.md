@@ -19,19 +19,21 @@ Não tenho a pretensão de transformar o projeto em uma referência de bibliotec
 opções para isso —, mas simplesmente ser um canal de fácil acesso para responder à pergunta, principalmente daqueles que
 buscam sobre nos mecanismos de pesquisas. 
 
-## Como executar
+## Como executar localmente
 
-1. Clone este repositório
+1. Gere um _Personal Access Token_ do GitHub para acessar a API [seguindo esse tutorial](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)
+2. Clone este repositório
     ```shell
     git clone git@github.com:vcampitelli/phpnaomorreu.git
     ```
-2. Certifique-se que você tenha o [Docker](https://docs.docker.com/get-docker) e [Docker Compose](https://docs.docker.com/compose/install) instalados
-3. Execute:
+3. Copie o arquivo `.env.dist` para `.env` e adicione na variável `GITHUB_TOKEN` o _token_ que você gerou no passo 1
+4. Certifique-se que você tenha o [Docker](https://docs.docker.com/get-docker) e [Docker Compose](https://docs.docker.com/compose/install) instalados
+5. Execute o comando abaixo para fazer o _build_
     ```shell
     docker compose up
     ```
-4. Abra o arquivo `public/index.html` em seu navegador
-5. Cada alteração no projeto irá disparar um _build_ automático (então basta acompanhar os logs do passo 3)
+6. Em seu navegador, abra o arquivo `public/index.html` (que é gerado com o comando acima)
+7. Cada alteração no projeto irá disparar um _build_ automático para atualizar o `public/index.html`, então basta acompanhar os logs do passo 5
 
 ## Como contribuir
 
