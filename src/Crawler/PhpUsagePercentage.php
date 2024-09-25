@@ -8,15 +8,17 @@ use App\CurlExec;
 use DOMDocument;
 use DOMXPath;
 
-class PhpUsagePercentage
+readonly class PhpUsagePercentage
 {
-    public function __construct(private readonly string $url)
-    {
+    public function __construct(
+        private string $url,
+        private CurlExec $curlExec
+    ) {
     }
 
     public function __invoke(): ?float
     {
-        $xpath = (new CurlExec())->fetchAsXpath($this->url);
+        $xpath = $this->curlExec->fetchAsXpath($this->url);
 
         $languages = $xpath->query('//table[@class="hist"]/tr');
         foreach ($languages as $language) {

@@ -8,15 +8,17 @@ use App\CurlExec;
 use DOMDocument;
 use DOMXPath;
 
-class WordpressUsagePercentage
+readonly class WordpressUsagePercentage
 {
-    public function __construct(private readonly string $url)
-    {
+    public function __construct(
+        private string $url,
+        private CurlExec $curlExec
+    ) {
     }
 
     public function __invoke(): ?array
     {
-        $xpath = (new CurlExec())->fetchAsXpath($this->url);
+        $xpath = $this->curlExec->fetchAsXpath($this->url);
 
         $languages = $xpath->query('//p[@class="surv"]');
         foreach ($languages as $language) {

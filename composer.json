@@ -17,7 +17,10 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": "^8.3"
+        "php": "^8.3",
+        "ext-curl": "*",
+        "ext-dom": "*",
+        "ext-libxml": "*"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "4.0.x-dev",
