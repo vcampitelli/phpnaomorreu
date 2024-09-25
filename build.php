@@ -29,10 +29,15 @@ $stars = $run(
         ->addOrganization('laminas', 'laminas')
 );
 
+$curlExec = new \App\CurlExec(
+    cachePath: \getenv('CACHE_PATH') ?: null,
+);
+
 [$latestPhpVersion, $latestPhpVersionReleaseDate] = $run(
     'Última versão do PHP',
     new App\Crawler\LatestPhpVersion(
         'https://www.php.net/releases/active.php',
+        $curlExec,
     )
 );
 
@@ -40,6 +45,7 @@ $phpUsagePercentage = $run(
     'Uso do PHP no w3techs.com',
     new App\Crawler\PhpUsagePercentage(
         'https://w3techs.com/technologies/history_overview/programming_language',
+        $curlExec,
     )
 );
 
@@ -47,6 +53,7 @@ $phpUsagePercentage = $run(
     'Uso do WordPress no w3techs.com',
     new App\Crawler\WordpressUsagePercentage(
         'https://w3techs.com/technologies/details/cm-wordpress',
+        $curlExec,
     )
 );
 
